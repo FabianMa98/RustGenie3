@@ -36,8 +36,21 @@ impl GENIE3 {
     pub fn run(&self) -> Vec<Vec<f32>> {
         let now = Instant::now();
         let ngenes = self.expression_matrix.cols();
-
+        if regulators == 'all' {
+            let input_idx: Vec<usize> = (0..ngenes as i32).collect();
+        } else {
+            let input_idx: Vec<usize> = gene_regulators_intersection(self.regulators, self.expression_matrix.genes)
+        }
         let elapsed_time = now.elapsed();
     }
 
+}
+
+fn gene_regulators_intersection(regulators: Vec<String>, genes: Vec<String>) -> Vec<usize> {
+    genes
+    .iter()
+    .enumerate()
+    .filter(|_, gene| regulators.contains(gene))
+    .map(|i, _| i)
+    .collect()
 }
