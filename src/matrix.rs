@@ -1,7 +1,5 @@
-use std::collections::HashMap;
-
-struct GeneExpressionMatrix {
-    data: Vec<f64>,
+pub struct GeneExpressionMatrix {
+    data: Vec<Vec<f64>>,       // Changed to Vec<Vec<f64>> for double vector representation
     genes: Vec<String>,
     samples: Vec<String>,
     rows: usize,
@@ -9,13 +7,16 @@ struct GeneExpressionMatrix {
 }
 
 impl GeneExpressionMatrix {
-    /// Creeates new gene expression matrix with given genes and samples
-    fn new(genes: Vec<String>, samples: Vec<String>) -> Self {
+    /// Creates a new gene expression matrix with the given genes and samples
+    pub fn new(genes: Vec<String>, samples: Vec<String>) -> Self {
         let rows = genes.len();
         let cols = samples.len();
 
+        // Initialize a 2D vector with zeros for each gene-sample pair
+        let data = vec![vec![0.0; cols]; rows];
+
         GeneExpressionMatrix {
-            data: vec![0.0; row * cols],
+            data,
             genes,
             samples,
             rows,
@@ -23,50 +24,47 @@ impl GeneExpressionMatrix {
         }
     }
 
-    /// Getter
-    fn get(&self, gene: &str, sammple: &str) -> Option<f64> {
+    /// Getter for a specific gene and sample
+    pub fn get(&self, gene: &str, sample: &str) -> Option<f64> {
         let row = self.genes.iter().position(|g| g == gene)?;
         let col = self.samples.iter().position(|s| s == sample)?;
 
-        Some(self.data[row * sef.cols + col])
+        Some(self.data[row][col])
     }
 
-    /// Setter
-    fn set(&mut self, gene: &str, sample: &str, value: f64) -> Result<(), String> {
+    /// Setter for a specific gene and sample
+    pub fn set(&mut self, gene: &str, sample: &str, value: f64) -> Result<(), String> {
         let row = self.genes.iter().position(|g| g == gene).ok_or("Gene was not found")?;
         let col = self.samples.iter().position(|s| s == sample).ok_or("Sample was not found")?;
-        self.data[row * self.cols + col] = value;
+        self.data[row][col] = value;
         Ok(())
     }
 
-    /// Norm matrix
-    fn normalize_by_gene(&mut self) {
-        for row in 0..self.rows {
-            let row_start = row * self.cols;
-            let row_end = row_start + self.cols;
-            let gene_values = &mut self.data[row_start..row_end];
-            let mean = gene_values.iter().copied().sum::<f64>() / gene_values.len() as f64;
-            let std_dev = (gene_values.iter()
+    /// Normalize each gene's expression values (rows) across all samples
+    pub fn normalize_by_gene(&mut self) {
+        for row in &mut self.data {
+            let mean = row.iter().copied().sum::<f64>() / row.len() as f64;
+            let std_dev = (row.iter()
                 .map(|&x| (x - mean).powi(2))
                 .sum::<f64>()
-                / gene_values.len() as f64)
+                / row.len() as f64)
                 .sqrt();
 
-            for value in gene_values {
+            for value in row.iter_mut() {
                 *value = (*value - mean) / std_dev;
             }
         }
     }
 
-    // Getter for Gene Expression
-    fn get_gene_expression(&self, gene: &str) -> Option<Vec<f64>> {
+    /// Getter for all expression values of a specific gene (row)
+    pub fn get_gene_expression(&self, gene: &str) -> Option<Vec<f64>> {
         let row = self.genes.iter().position(|g| g == gene)?;
-        Some(self.data[row * self.cols..(row + 1) * self.cols].to_vec())
+        Some(self.data[row].clone())
     }
 
-    // Getter for Smaple Expression
-    fn get_sample_expression(&self, sample: &str) -> Option<Vec<f64>> {
-        
+    /// Getter for all expression values of a specific sample (column)
+    pub fn get_sample_expression(&self, sample: &str) -> Option<Vec<f64>> {
+        let col = self.samples.iter().position(|s| s == sample)?;
+        Some(self.data.iter().map(|row| row[col]).collect())
     }
-
 }
