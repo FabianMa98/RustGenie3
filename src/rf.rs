@@ -6,6 +6,7 @@ use matrix::GeneExpressionMatrix
 
 /// In our case gene names are mandatory for this to ensure proper
 /// running
+/// TODO: Implement arg checking
 pub struct GENIE3 {
     expression_matrix: GeneExpressionMatrix,
     regulators: Vec<String>,
@@ -32,6 +33,11 @@ impl GENIE3 {
                     }
                 }
 
-    pub fn run(self) -> Vec<Vec<f32>>
+    pub fn run(&self) -> Vec<Vec<f32>> {
+        let now = Instant::now();
+        let ngenes = self.expression_matrix.cols();
+
+        let elapsed_time = now.elapsed();
+    }
 
 }

@@ -67,4 +67,9 @@ impl GeneExpressionMatrix {
         let col = self.samples.iter().position(|s| s == sample)?;
         Some(self.data.iter().map(|row| row[col]).collect())
     }
+    
+    // Getter for number of rows (all genes)
+    pub fn cols(&self9) -> usize {
+        self.cols
+    }
 }
