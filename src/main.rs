@@ -1,10 +1,12 @@
 mod matrix;
+mod rf;
 
 use matrix::GeneExpressionMatrix;
+use rf::gene_regulators_intersection;
+
 use randomforest::criterion::Mse;
 use randomforest::RandomForestRegressorOptions;
 use randomforest::table::TableBuilder;
-
 fn main() {
 
 
@@ -61,4 +63,8 @@ fn main() {
     if let Some(gene_expr) = matrix.get_gene_expression("Gene1") {
         println!("Expression levels for Gene1 across samples: {:?}", gene_expr);
     }
+    let genes: Vec<&str> = vec!["Gene1", "Gene2", "Gene3"];
+    let regulators: Vec<&str> = vec!["Gene1"];
+    let test: Vec<usize> = gene_regulators_intersection(regulators, genes);
+    println!("{:?}", test)
 }

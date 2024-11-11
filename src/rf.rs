@@ -2,23 +2,23 @@ use randomforest::criterion::Mse;
 use randomforest::RandomForestRegressorOptions;
 use randomforest::table::TableBuilder;
 use std::time::Instant;
-use matrix::GeneExpressionMatrix
+use matrix::GeneExpressionMatrix;
 
 /// In our case gene names are mandatory for this to ensure proper
 /// running
 /// TODO: Implement arg checking
 pub struct GENIE3 {
     expression_matrix: GeneExpressionMatrix,
-    regulators: Vec<String>,
+    regulators: Vec<&str>,
     tree_method: String,
     k_number: String, 
-    n_tress: i32,
+    n_trees: i32,
     n_threads: i32,
 }
 
 impl GENIE3 {
     pub fn new(expression_matrix: GeneExpressionMatrix,
-                regulators: Vec<String>,
+                regulators: Vec<&str>,
                 tree_method: String,
                 k_number: String,
                 n_trees: i32,
@@ -42,15 +42,19 @@ impl GENIE3 {
             let input_idx: Vec<usize> = gene_regulators_intersection(self.regulators, self.expression_matrix.genes)
         }
         let elapsed_time = now.elapsed();
+
+        let shut_up_compiler: Vec<Vec<f32>> = vec![vec![1.000,2.000,3.000]]
+
+        shut_up_compiler
     }
 
 }
 
-fn gene_regulators_intersection(regulators: Vec<String>, genes: Vec<String>) -> Vec<usize> {
+pub fn gene_regulators_intersection(regulators: Vec<&str>, genes: Vec<&str>) -> Vec<usize> {
     genes
     .iter()
     .enumerate()
-    .filter(|_, gene| regulators.contains(gene))
+    .filter(|gene| regulators.contains(gene))
     .map(|i, _| i)
     .collect()
 }
