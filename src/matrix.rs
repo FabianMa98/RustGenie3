@@ -1,14 +1,14 @@
-pub struct GeneExpressionMatrix {
-    data: Vec<Vec<f64>>,       // Changed to Vec<Vec<f64>> for double vector representation
-    genes: Vec<String>,
-    samples: Vec<String>,
+pub struct GeneExpressionMatrix<'a> {
+    pub data: Vec<Vec<f64>>,       // Changed to Vec<Vec<f64>> for double vector representation
+    pub genes: Vec<&'a str>,
+    samples: Vec<&'a str>,
     rows: usize,
     cols: usize,
 }
 
-impl GeneExpressionMatrix {
+impl<'a> GeneExpressionMatrix<'a> {
     /// Creates a new gene expression matrix with the given genes and samples
-    pub fn new(genes: Vec<String>, samples: Vec<String>) -> Self {
+    pub fn new(genes: Vec<&'a str>, samples: Vec<&'a str>) -> Self {
         let rows = genes.len();
         let cols = samples.len();
 
@@ -58,7 +58,7 @@ impl GeneExpressionMatrix {
 
     /// Getter for all expression values of a specific gene (row)
     pub fn get_gene_expression(&self, gene: &str) -> Option<Vec<f64>> {
-        let row = self.genes.iter().position(|g| g == gene)?;
+        let row = self.genes.iter().position(|g| g == gene.as_str())?;
         Some(self.data[row].clone())
     }
 
@@ -69,7 +69,7 @@ impl GeneExpressionMatrix {
     }
     
     // Getter for number of rows (all genes)
-    pub fn cols(&self9) -> usize {
+    pub fn cols(&self) -> usize {
         self.cols
     }
 }
