@@ -1,6 +1,3 @@
-use randomforest::criterion::Mse;
-use randomforest::RandomForestRegressorOptions;
-use randomforest::table::TableBuilder;
 use std::time::Instant;
 use crate::GeneExpressionMatrix;
 
@@ -17,7 +14,7 @@ pub struct GENIE3<'a> {
 }
 
 impl<'a> GENIE3<'a> {
-    pub fn new(expression_matrix: GeneExpressionMatrix,
+    pub fn new(expression_matrix: GeneExpressionMatrix<'a>,
                 regulators: Vec<&'a str>,
                 tree_method: String,
                 k_number: String,
@@ -39,7 +36,7 @@ impl<'a> GENIE3<'a> {
         if self.regulators == vec!["all"] {
             let input_idx: Vec<usize> = (0..ngenes).collect();
         } else {
-            let input_idx: Vec<usize> = gene_regulators_intersection(self.regulators, self.expression_matrix.genes);
+            let input_idx: Vec<usize> = gene_regulators_intersection(self.regulators.clone(), self.expression_matrix.genes.clone());
         }
         let elapsed_time = now.elapsed();
 

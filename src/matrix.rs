@@ -26,16 +26,16 @@ impl<'a> GeneExpressionMatrix<'a> {
 
     /// Getter for a specific gene and sample
     pub fn get(&self, gene: &str, sample: &str) -> Option<f64> {
-        let row = self.genes.iter().position(|g| g == gene)?;
-        let col = self.samples.iter().position(|s| s == sample)?;
+        let row = self.genes.iter().position(|g| g.to_string() == gene.to_string())?;
+        let col = self.samples.iter().position(|s| s.to_string() == sample.to_string())?;
 
         Some(self.data[row][col])
     }
 
     /// Setter for a specific gene and sample
     pub fn set(&mut self, gene: &str, sample: &str, value: f64) -> Result<(), String> {
-        let row = self.genes.iter().position(|g| g == gene).ok_or("Gene was not found")?;
-        let col = self.samples.iter().position(|s| s == sample).ok_or("Sample was not found")?;
+        let row = self.genes.iter().position(|g| g.to_string() == gene.to_string()).ok_or("Gene was not found")?;
+        let col = self.samples.iter().position(|s| s.to_string() == sample.to_string()).ok_or("Sample was not found")?;
         self.data[row][col] = value;
         Ok(())
     }
@@ -58,13 +58,13 @@ impl<'a> GeneExpressionMatrix<'a> {
 
     /// Getter for all expression values of a specific gene (row)
     pub fn get_gene_expression(&self, gene: &str) -> Option<Vec<f64>> {
-        let row = self.genes.iter().position(|g| g == gene.as_str())?;
+        let row = self.genes.iter().position(|g| g.to_string() == gene.to_string())?;
         Some(self.data[row].clone())
     }
 
     /// Getter for all expression values of a specific sample (column)
     pub fn get_sample_expression(&self, sample: &str) -> Option<Vec<f64>> {
-        let col = self.samples.iter().position(|s| s == sample)?;
+        let col = self.samples.iter().position(|s| s.to_string() == sample.to_string())?;
         Some(self.data.iter().map(|row| row[col]).collect())
     }
     

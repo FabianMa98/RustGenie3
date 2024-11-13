@@ -41,8 +41,8 @@ fn main() {
     assert_eq!(regressor.predict(&[1.0, 2.0, 0.0, 0.0]), 41.9785);
     println!("{}", regressor.predict(&[1.0, 0.0, 1.0, 1.0]));
     // Define some sample genes and samples
-    let genes = vec!["Gene1".to_string(), "Gene2".to_string(), "Gene3".to_string()];
-    let samples = vec!["SampleA".to_string(), "SampleB".to_string(), "SampleC".to_string()];
+    let genes = vec!["Gene1", "Gene2", "Gene3"];
+    let samples = vec!["SampleA", "SampleB", "SampleC"];
 
     // Initialize the gene expression matrix
     let mut matrix = GeneExpressionMatrix::new(genes, samples);
