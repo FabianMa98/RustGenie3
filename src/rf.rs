@@ -35,14 +35,26 @@ impl<'a> GENIE3<'a> {
         let ngenes = self.expression_matrix.cols();
         if self.regulators == vec!["all"] {
             let input_idx: Vec<usize> = (0..ngenes).collect();
+
+            println!("{:?}", input_idx);
         } else {
             let input_idx: Vec<usize> = gene_regulators_intersection(self.regulators.clone(), self.expression_matrix.genes.clone());
+            let zero_matrix: Vec<Vec<f32>> = self.create_zero_matrix_by_shape();
+            println!("{:?}", zero_matrix);
+            println!("{:?}", input_idx);
         }
         let elapsed_time = now.elapsed();
-
         let shut_up_compiler: Vec<Vec<f32>> = vec![vec![1.000,2.000,3.000]];
 
-        shut_up_compiler
+        shut_up_compiler 
+    }
+
+
+    /// Allocate zero based variable importance matrix
+    fn create_zero_matrix_by_shape(&self) -> Vec<Vec<f32>> {
+        let dummy_vec: Vec<Vec<f32>> = vec![vec![0.0,0.0,0.0]];
+
+        dummy_vec
     }
 
 }

@@ -2,13 +2,13 @@ mod matrix;
 mod rf;
 
 use matrix::GeneExpressionMatrix;
+use rf::GENIE3;
 use rf::gene_regulators_intersection;
 
 use randomforest::criterion::Mse;
 use randomforest::RandomForestRegressorOptions;
 use randomforest::table::TableBuilder;
 fn main() {
-
 
     let features = [
     &[0.0, 2.0, 1.0, 0.0][..],
@@ -65,6 +65,15 @@ fn main() {
     }
     let genes: Vec<&str> = vec!["Gene1", "Gene2", "Gene3"];
     let regulators: Vec<&str> = vec!["Gene1"];
-    let test: Vec<usize> = gene_regulators_intersection(regulators, genes);
-    println!("{:?}", test)
+    let test: Vec<usize> = gene_regulators_intersection(regulators.clone(), genes.clone());
+    println!("{:?}", test);
+
+    let method = String::from("Test");
+    let k_ = String::from("K");
+
+    let mut genie_test = GENIE3::new(matrix, regulators, method, k_, 2, 2);
+
+    let result = genie_test.run();
+
+    println!("{:?}", result);
 }
