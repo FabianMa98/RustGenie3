@@ -1,9 +1,9 @@
 pub struct GeneExpressionMatrix<'a> {
     pub data: Vec<Vec<f64>>,       // Changed to Vec<Vec<f64>> for double vector representation
     pub genes: Vec<&'a str>,
-    samples: Vec<&'a str>,
-    rows: usize,
-    cols: usize,
+    pub samples: Vec<&'a str>,
+    pub rows: usize,
+    pub cols: usize,
 }
 
 impl<'a> GeneExpressionMatrix<'a> {

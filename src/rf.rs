@@ -1,4 +1,6 @@
 use std::time::Instant;
+use std::thread;
+
 use crate::GeneExpressionMatrix;
 
 /// In our case gene names are mandatory for this to ensure proper
@@ -52,9 +54,9 @@ impl<'a> GENIE3<'a> {
 
     /// Allocate zero based variable importance matrix
     fn create_zero_matrix_by_shape(&self) -> Vec<Vec<f32>> {
-        let dummy_vec: Vec<Vec<f32>> = vec![vec![0.0,0.0,0.0]];
+        let zero_matrix = vec![vec![0f32; self.expression_matrix.cols]; self.expression_matrix.rows];
 
-        dummy_vec
+        zero_matrix
     }
 
 }
