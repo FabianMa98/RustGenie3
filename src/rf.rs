@@ -1,7 +1,7 @@
 use std::time::Instant;
 use std::thread;
 
-use crate::GeneExpressionMatrix;
+use crate::{matrix, GeneExpressionMatrix};
 
 /// In our case gene names are mandatory for this to ensure proper
 /// running
@@ -41,9 +41,8 @@ impl<'a> GENIE3<'a> {
             println!("{:?}", input_idx);
         } else {
             let input_idx: Vec<usize> = gene_regulators_intersection(self.regulators.clone(), self.expression_matrix.genes.clone());
-            let zero_matrix: Vec<Vec<f32>> = self.create_zero_matrix_by_shape();
-            println!("{:?}", zero_matrix);
-            println!("{:?}", input_idx);
+            let zero_matrix: Vec<Vec<f32>> = self.create_zero_matrix_by_shape(); // This will be our final VIM
+            let 
         }
         let elapsed_time = now.elapsed();
         let shut_up_compiler: Vec<Vec<f32>> = vec![vec![1.000,2.000,3.000]];
@@ -59,6 +58,48 @@ impl<'a> GENIE3<'a> {
         zero_matrix
     }
 
+    fn filter_matrix_by_col(&self, exclusion_idx: Vec<i32>) -> Vec<Vec<f64>> {
+        let mut new_matrix: Vec<Vec<f64>> = self.expression_matrix.data.clone();
+
+        let return_matrix = new_matrix
+        .iter()
+        .map(|row| {
+            row.iter() // put into iterator
+                .enumerate() // same to python enumerate, generates (index, value) tuple
+                .filter(|(col_idx, _)| !exclusion_idx.contains(col_idx))
+                .map(|(_, value)| *value)
+                .collect()
+        })
+        .collect();
+
+        return_matrix
+
+    }
+
+    fn filter_matrix_by_val(&self, exclusion_val: Vec<&str>) -< Vec<Vec<f64>> {
+        // Cloning expression_matrix data might actually slow this down by a lot
+        let new_matrix = self.expression_matrix.data.clone();
+
+        let return_matrix = new_matrix
+            .iter()
+            .map(|row| {
+                row.iter()
+                    .enumerate()
+                    .filter(|_, col_val| !exclusion_val.contains(col_val))
+                    .map(|_. value| *value)
+                    .collect()
+            })
+            .collect();
+
+        return_matrix
+    }
+
+    fn get_single_target_expression_value(&self, target: &str) {
+        let target = self.expression_matrix.get_sample_expression(target);
+        let norm_target = target.normalize_by_gene()
+
+        return target
+    }
 }
 
 pub fn gene_regulators_intersection(regulators: Vec<&str>, genes: Vec<&str>) -> Vec<usize> {
@@ -68,4 +109,5 @@ pub fn gene_regulators_intersection(regulators: Vec<&str>, genes: Vec<&str>) -> 
     .filter(|(_, gene)| regulators.contains(gene))
     .map(|(i, _)| i)
     .collect()
+
 }
