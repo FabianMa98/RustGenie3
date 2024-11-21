@@ -168,10 +168,8 @@ fn genie3_single(
     let ngenes = expr_data.shape()[1];
     let output = expr_data.column(output_idx).to_owned();
 
-    // Normalize output data
     let normalized_output = normalize(&output);
 
-    // Remove target gene from candidate regulators
     if let Some(pos) = input_idx.iter().position(|&x| x == output_idx) {
         input_idx.remove(pos);
     }
