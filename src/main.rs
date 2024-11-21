@@ -71,7 +71,7 @@ fn main() {
     let method = String::from("Test");
     let k_ = String::from("K");
 
-    let mut genie_test = GENIE3::new(matrix, regulators, method, k_, 2, 2);
+    let genie_test = GENIE3::new(matrix, regulators, method, k_, 2, 2);
 
     let result = genie_test.run();
 
